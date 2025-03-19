@@ -2,33 +2,6 @@ package unit_test;
 
 import com.myproject.*;
 
-class TestStockFeeder {
-    public void test01() {
-        StockFeeder x = StockFeeder.getInstance();
-        StockFeeder y = StockFeeder.getInstance();
-        System.out.println("Hashcode of x: " + x.hashCode());
-        System.out.println("Hashcode of y: " + y.hashCode());
-        if(x == y) {System.out.println("x and y points to the same allocated memory");}
-        else {System.out.println("x and y DO NOT points to the same allocated memory");}
-    }
-    public void test02() {
-        StockFeeder stockFeeder = StockFeeder.getInstance();
-
-        int numStock = 5;
-        Stock[] stockArr= new Stock[numStock];
-        stockArr[0] = new Stock("HPG", "Hoa Phat group");
-        stockArr[1] = new Stock("NKG", "Nam Kim group");
-        stockArr[2] = new Stock("HSG", "Hoa Sen group");
-        stockArr[3] = new Stock("PLX", "Petrolimex");
-        stockArr[4] = new Stock("HTG", "Hoa Tho group");
-
-        for(Stock stock : stockArr) {
-            stockFeeder.addStock(stock);
-        }
-        System.out.println(stockFeeder.getStockList().toString());
-    }
-}
-
 class TestRealTime {
     public void test01() {
         int numStock = 12;
@@ -124,7 +97,6 @@ class TestStockAlert {
 public class tc01 {
     public static void main(String[] args) {
         System.out.println("Unit test");
-        TestStockFeeder test1 = new TestStockFeeder();
         TestRealTime test2 = new TestRealTime();
         TestStockAlert test3 = new TestStockAlert();
 
