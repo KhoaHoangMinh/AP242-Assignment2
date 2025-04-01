@@ -20,7 +20,7 @@ public class StockFeeder {
             }
         }
         List<StockViewer> viewerList = viewers.get(code);
-        if(viewerList != null) {viewerNexists = !viewerList.contains(stockViewer);}
+        if(viewerList != null) { viewerNexists = !viewerList.contains(stockViewer); }
         return stockExists && viewerNexists;
     }
 
@@ -35,58 +35,51 @@ public class StockFeeder {
             }
         }
         List<StockViewer> viewerList = viewers.get(code);
-        if(viewerList != null) {viewerExists = viewerList.contains(stockViewer);}
+        if(viewerList != null) { viewerExists = viewerList.contains(stockViewer); }
         return stockExists && viewerExists;
     }
 
-
-
-    public Map<String, List<StockViewer>> getViewers() {return viewers;}
-    public List<Stock> getStockList() {return stockList;}
+    public Map<String, List<StockViewer>> getViewers() { return viewers; }
+    public List<Stock> getStockList() { return stockList; }
 
     // TODO: Implement Singleton pattern
     private StockFeeder() {}
 
     public static StockFeeder getInstance() {
         // TODO: Implement Singleton logic
-        if(instance == null) {instance = new StockFeeder();}
+        if(instance == null) { instance = new StockFeeder(); }
         return instance;
     }
 
     public void addStock(Stock stock) {
         // TODO: Implement adding a stock to stockList
         if(!stockList.contains(stock)) { stockList.add(stock); }
-        if(!viewers.containsKey(stock.getCode())) {viewers.put(stock.getCode(), new ArrayList<>());}
+        viewers.computeIfAbsent(stock.getCode(), k -> new ArrayList<>());
     }
 
     public void registerViewer(String code, StockViewer stockViewer) {
         // TODO: Implement registration logic, including checking stock existence
         // TODO: test
-//        if(viewers.containsKey());
         if(!checkRegister(code, stockViewer)) {
             Logger.errorRegister(code);
             return;
         }
-        List<StockViewer> viewerList = viewers.get(code);
-        viewerList.add(stockViewer);
+        viewers.computeIfAbsent(code, k -> new ArrayList<>());
+        viewers.get(code).add(stockViewer);
     }    
 
     public void unregisterViewer(String code, StockViewer stockViewer) {
         // TODO: Implement unregister logic, including error logging
-        // TODO: test
         if(!checkUnregister(code, stockViewer)) {
             Logger.errorUnregister(code);
             return;
         }
-        List<StockViewer> viewerList = viewers.get(code);
-        viewerList.remove(stockViewer);
+        viewers.get(code).remove(stockViewer);
     }
 
     public void notify(StockPrice stockPrice) {
         // TODO: Implement notifying registered viewers about price updates
-        // TODO: test
-        String code = stockPrice.getCode();
-        List<StockViewer> viewerList = viewers.get(code);
+        List<StockViewer> viewerList = viewers.get(stockPrice.getCode());
         if(viewerList != null) {
             for(StockViewer viewer : viewerList) {
                 viewer.onUpdate(stockPrice);
