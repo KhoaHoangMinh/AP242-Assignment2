@@ -14,20 +14,23 @@ public class StockAlertView implements StockViewer {
         alertThresholdLow = lowThreshold;
     }
 
-    public Map<String, Double> getLastAlertedPrice() {return lastAlertedPrices;}
+    public Map<String, Double> getLastAlertedPrice() { return lastAlertedPrices; }
 
     @Override
     public void onUpdate(StockPrice stockPrice) {
         // TODO: Implement alert logic based on threshold conditions
         String stockCode = stockPrice.getCode();
+        Double lastPrice = getLastAlertedPrice().get(stockPrice.getCode());
         double newPrice = stockPrice.getAvgPrice();
-        alertAbove(stockCode, newPrice);
-        alertBelow(stockCode, newPrice);
+        if(lastPrice == null || newPrice != lastPrice) {
+            alertAbove(stockCode, newPrice);
+            alertBelow(stockCode, newPrice);
+        }
+
     }
 
     private void alertAbove(String stockCode, double price) {
         // TODO: Call Logger to log the alert
-//        Logger.notImplementedYet("alertAbove");
         if(price > alertThresholdHigh) {
             Logger.logAlert(stockCode, price);
             lastAlertedPrices.put(stockCode, price);
@@ -36,7 +39,6 @@ public class StockAlertView implements StockViewer {
 
     private void alertBelow(String stockCode, double price) {
         // TODO: Call Logger to log the alert
-//        Logger.notImplementedYet("alertBelow");
         if(price < alertThresholdLow) {
             Logger.logAlert(stockCode, price);
             lastAlertedPrices.put(stockCode, price);
