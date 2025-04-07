@@ -54,6 +54,15 @@ public class StockFeeder {
     public void addStock(Stock stock) {
         // TODO: Implement adding a stock to stockList
         if(!stockList.contains(stock)) { stockList.add(stock); }
+        else {
+            for (Stock pStock : stockList) {
+                if(Objects.equals(pStock.getCode(), stock.getCode()) &&
+                        !Objects.equals(pStock.getName(), stock.getName())) {
+                    stockList.remove(pStock);
+                    stockList.add(stock);
+                }
+            }
+        }
         viewers.computeIfAbsent(stock.getCode(), k -> new ArrayList<>());
     }
 
